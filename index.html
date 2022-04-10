@@ -6,20 +6,22 @@
     <title>Quiz</title>
 
     <link rel="stylesheet" href="style.css" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&family=Stardos+Stencil:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body>
-    <main>
+    <main >
+      <div class="progress-bar"></div>
+
       <div class="title">
-        <h1>Quiz sobre os Peaky Blinders</h1>
-        <p>Responda um questionário sobre a série Peaky Blinders</p>
-        <p>Por ordem dos Peaky Blinders P#RRA!</p>
+        <img src="/images/logo-peaky-blinders-2.png" alt="">
+        <h1>Quiz</h1>
+        <div class="texto--title">
+          <p>Quiz sobre a série Peaky Blinders.</p>
+          <p>Por ordem dos Peaky Blinders P#RRA!</p>
+          <button onclick="showQuestion()">Iniciar</button>
+        </div>
       </div>
 
       <section class="questions"></section>
@@ -28,16 +30,23 @@
         <div class="question">
           <h3 id="question--title" class="question--title"></h3>
           <div class="question--options">
-            <span class="option-1" onclick=""></span>
-            <span class="option-2" onclick=""></span>
-            <span class="option-3" onclick=""></span>
-            <span class="option-4" onclick=""></span>
           </div>
         </div>
       </section>
+
+      <section class="finish-quiz">
+        <div class="finish-results">
+          <img src="/images/trofeu.png" alt="">
+          <h2 class="results--message"></h2>
+          <p class="results--porcent"></p>
+          <p class="results--correctAnwsers"></p>
+          <button class="restart-button"></button>
+        </div>
+
+      </section>
     </main>
 
+    <script type="text/javascript" src="/questions.js"></script>
     <script src="/main.js"></script>
-    <script type="text/javascript" src="/questionList.js"></script>
   </body>
 </html>

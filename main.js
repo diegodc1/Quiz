@@ -1,91 +1,84 @@
-let questionsList = [
-  {
-    id: 1,
-    question: 'Que parte de Birmingham os Peaky Blinders chamam de lar?',
-    alternatives: ['Small Heath', 'Edgbaston', 'Kingstanding', 'Kingscroll'],
-    correctAnswer: 'Edgbaston'
-  },
-  {
-    id: 2,
-    question: 'O inspetor Campbell foi trazido de ...',
-    alternatives: ['Belfast', 'Londres', 'Dublin', 'Paris'],
-    correctAnswer: 'Dublin'
-  },
-  {
-    id: 3,
-    question: 'Como se chama o filho de Tommy?',
-    alternatives: ['Charles', 'Lucas', 'Josh', 'John'],
-    correctAnswer: 'John'
+//Initial data
+let currentQuestion = 0;
+let correctAnswers = 0;
+
+// showQuestion()
+
+//Events
+document.querySelector('.restart-button').addEventListener('click', resetQuiz)
+
+//Functions
+function showQuestion() {
+  if(questionsList[currentQuestion]) {
+    let q = questionsList[currentQuestion]
+    let porcent = Math.floor((currentQuestion / questionsList.length) * 100)
+
+    document.querySelector(".question").style.display = "block"
+    document.querySelector(".finish-quiz").style.display = "none"
+    document.querySelector(".texto--title").style.display = "none"
+    document.querySelector(".progress-bar").style.width = `${porcent}%`
+
+    document.querySelector('.question--title').innerHTML = q.question
+
+    let optionHTML = ''
+    for(let i in q.alternatives) {
+      optionHTML += `<span data-op="${i}" class="option"> ${q.alternatives[i]}</span>`
+    }
+  
+    document.querySelector('.question--options').innerHTML = optionHTML
+
+    document.querySelectorAll('.question--options .option').forEach(item => {
+      item.addEventListener('click', optionClickEvent)
+    })
+  } else {
+    finishQuiz()
   }
-]
-
-const c = el => document.querySelector(el)
-
-questionsList.map(question => {
-  var questionItem = c('.question').cloneNode(true)
-
-  // questionItem.setAttribute('data-key', index)
-
-  questionItem.querySelector('#question--title').innerHTML = question.question
-  questionItem.querySelector('.option-1').innerHTML = question.alternatives[1]
-  questionItem.querySelector('.option-2').innerHTML = question.alternatives[0]
-  questionItem.querySelector('.option-3').innerHTML = question.alternatives[2]
-  questionItem.querySelector('.option-4').innerHTML = question.alternatives[3]
-
-  let option1 = questionItem.querySelector('.option-1').textContent
-  let option2 = questionItem.querySelector('.option-2').textContent
-  let option3 = questionItem.querySelector('.option-3').textContent
-  let option4 = questionItem.querySelector('.option-4').textContent
-
-  let answer = question.correctAnswer
-
-  checkAnswer(questionItem, option1, option2, option3, option4)
-
-  // console.log(question.correctAnswer)
-
-  c('.questions').append(questionItem)
-})
-
-function checkAnswer(answer, questionItem, option1, option2, option3, option4) {
-  var questionItem = c('.question')
-
-  if (answer == option1) {
-    questionItem.querySelector('.option-1').classList.add('correct')
-  } else if (answer == option2) {
-    questionItem.querySelector('.option-2').classList.add('correct')
-  } else if (answer == option3) {
-    questionItem.querySelector('.option-3').classList.add('correct')
-  } else if (answer == option4) {
-    questionItem.querySelector('.option-4').classList.add('correct')
-  }
-
-  console.log(questionsList.correctAnswer)
 }
 
-function clearAnswer() {
-  var questionItem = c('.question')
-  questionItem.querySelector('.option-1').classList.remove('correct')
-  questionItem.querySelector('.option-2').classList.remove('correct')
-  questionItem.querySelector('.option-3').classList.remove('correct')
-  questionItem.querySelector('.option-4').classList.remove('correct')
+function optionClickEvent(e) {
+  let clickedOption = parseInt(e.target.getAttribute('data-op'));
+
+  if(questionsList[currentQuestion].answer === clickedOption) {
+    correctAnswers++
+   e.target.classList.add('correct')
+  } else {
+   e.target.classList.add('wrong')
+
+  }
+
+  setTimeout(currentQuestion++, 1200)
+
+  setTimeout(showQuestion, 1300)
 }
 
-function addQuestionsToList(
-  id,
-  question,
-  correct,
-  wrong1,
-  wrong2,
-  wrong3,
-  wrong4
-) {
-  questionsList.push({
-    id,
-    question: question,
-    correct: correct,
-    wrong1: wrong1,
-    wrong2: wrong2,
-    wrong3: wrong3,
-    wrong4: wrong4
-  })
+function finishQuiz() {
+  let points = Math.floor((correctAnswers / questionsList.length) * 100);
+
+  if(points < 30) {
+    document.querySelector('.results--message').innerHTML = "Tente novamente!"
+    document.querySelector('.results--porcent').style.color = "#FF0000"
+  } else if (points >= 30 && points <= 50) {
+    document.querySelector('.results--message').innerHTML = "Tente melhorar!"
+    document.querySelector('.results--porcent').style.color = "#FFFF00"
+  } else if (points >= 51 && points <= 80) {
+    document.querySelector('.results--message').innerHTML = "Muito bem!"
+    document.querySelector('.results--porcent').style.color = "#0D900D"
+  } else if (points > 80) {
+    document.querySelector('.results--message').innerHTML = "Muito bom! Parabéns!"
+    document.querySelector('.results--porcent').style.color = "#0D630D"
+  }
+
+  document.querySelector('.results--porcent').innerHTML = `Você acertou ${points}%`
+  document.querySelector('.results--correctAnwsers').innerHTML = `Você respondeu ${questionsList.length} perguntas e acertou  ${correctAnswers}`
+
+  document.querySelector(".question").style.display = "none"
+  document.querySelector(".finish-quiz").style.display = "block"
+  document.querySelector(".progress-bar").style.width = "100%"
+
+}
+
+function resetQuiz() {
+  currentQuestion = 0
+  correctAnswers = 0 
+  showQuestion()
 }
